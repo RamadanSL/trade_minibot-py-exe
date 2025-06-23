@@ -12,40 +12,6 @@
 
 ---
 
-## Запуск
-
-1. Запустите файл `dist/bombie_app.exe`
-2. Все настройки и файлы появятся в подпапке `bombie_data`
-3. Управляйте ботом через интерфейс (выбор тикера, параметры, AI-сигналы)
-
----
-
-## Выгрузка на GitHub
-
-1. Запустите `upload_to_github.bat`
-2. Все файлы будут автоматически выгружены в ваш репозиторий: [https://github.com/RamadanSL/trade_minibot-py-exe](https://github.com/RamadanSL/trade_minibot-py-exe)
-
----
-
-## Требования
-
-- Для работы exe — **ничего не требуется** (portable)
-- Для выгрузки на GitHub — установленный **git** и авторизация
-
----
-
-## Быстрый старт
-
-```sh
-# Запуск бота
-./dist/bombie_app.exe
-
-# Выгрузка на GitHub
-./upload_to_github.bat
-```
-
----
-
 ## Возможности
 
 - Автоматическая торговля на Bybit
@@ -53,4 +19,37 @@
 - Поддержка топовых, мемных и игровых токенов (Telegram)
 - Красивый и удобный интерфейс
 - Portable-режим: не требует установки
-- Быстрая выгрузка на GitHub одной командой 
+
+---
+
+## Требования
+
+- Python 3.10+
+- PySide6, requests, pybit, numpy, pandas
+- Для сборки portable exe — установленный PyInstaller
+
+---
+
+## Сборка portable exe
+
+1. Установите зависимости:
+
+```sh
+pip install PySide6 requests pybit numpy pandas pyinstaller
+```
+
+2. Соберите portable exe:
+
+```sh
+pyinstaller --onefile --noconsole --strip --clean bombie_app.py
+```
+
+3. Готовый exe-файл появится в папке `dist/`
+
+---
+
+## Быстрый старт для разработчика
+
+- Редактируйте тикеры, параметры и логику в `bombie_app.py`
+- Собирайте новый exe через PyInstaller
+- Все настройки и рабочие файлы будут храниться в подпапке `bombie_data` рядом с exe 
