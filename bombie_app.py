@@ -1,15 +1,27 @@
 import sys
 import os
 import json
+import subprocess
+import importlib.util
+
+def ensure_package(pkg):
+    if importlib.util.find_spec(pkg) is None:
+        try:
+            subprocess.check_call([sys.executable, '-m', 'pip', 'install', pkg])
+        except Exception:
+            pass
+for pkg in ['requests', 'PySide6', 'pybit', 'numpy', 'pandas']:
+    ensure_package(pkg)
+
+import requests
 from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QTextEdit, QFileDialog, QMessageBox, QScrollArea, QGroupBox, QComboBox)
 from PySide6.QtCore import Qt
-import threading
-import time
-import tempfile
 from pybit.unified_trading import HTTP
 import numpy as np
 import pandas as pd
-import requests
+import threading
+import time
+import tempfile
 
 # --- Параметры по умолчанию ---
 PARAMS = [
