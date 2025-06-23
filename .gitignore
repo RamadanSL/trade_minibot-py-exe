@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.pyo
+*.log
+pybit/
+API_KEY.txt
+API_SECRET.txt 
