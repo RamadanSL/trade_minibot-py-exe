@@ -27,6 +27,7 @@ import tempfile
 PARAMS = [
     ("API_KEY", "API ключ", ""),
     ("API_SECRET", "API секрет", ""),
+    ("GEMINI_API_KEY", "Gemini API ключ", "AIzaSyAhoTs2GnIUVI2BHZcNIc6k3GUDVUfsxrE"),
     ("PROFIT_PERCENT", "Тейк-профит (%)", "0.02"),
     ("GRID_PERCENT", "Grid %", "0.01"),
     ("GRID_PART", "Grid доля", "0.2"),
@@ -293,9 +294,6 @@ class Trader:
                 log(f"КРИТИЧЕСКАЯ ОШИБКА: {e}", level="FATAL")
                 time.sleep(30)
 
-GEMINI_API_KEY = "AIzaSyAhoTs2GnIUVI2BHZcNIc6k3GUDVUfsxrE"
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
-
 TICKERS = [
     "BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT", "TONUSDT", "ADAUSDT", "AVAXUSDT", "LINKUSDT",
     # Мемкоины
@@ -306,15 +304,17 @@ TICKERS = [
     "HAMSTERUSDT", "MOGUSDT", "BRETTUSDT", "POPCATUSDT", "BABYDOGEUSDT", "BLASTUSDT", "CHILLGUYUSDT", "OLUSDT", "MEMEFIUSDT", "MORPHOUSDT", "PNUTUSDT", "ZRCUSDT"
 ]
 
-def get_ai_signal(ticker):
+def get_ai_signal(ticker, settings=None):
     prompt = f"Дай краткий торговый совет (buy/sell/hold) по {ticker} на 1 час. Только одно слово."
     data = {
         "contents": [
             {"parts": [{"text": prompt}]}
         ]
     }
+    api_key = settings["GEMINI_API_KEY"] if settings and "GEMINI_API_KEY" in settings else "AIzaSyAhoTs2GnIUVI2BHZcNIc6k3GUDVUfsxrE"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
     try:
-        resp = requests.post(GEMINI_URL, json=data, headers={"Content-Type": "application/json"}, timeout=10)
+        resp = requests.post(url, json=data, headers={"Content-Type": "application/json"}, timeout=10)
         if resp.ok:
             txt = resp.json()["candidates"][0]["content"]["parts"][0]["text"].strip().lower()
             if "buy" in txt:
@@ -427,7 +427,7 @@ class MainWindow(QMainWindow):
         self.update_ai_signal()
 
     def update_ai_signal(self):
-        sig = get_ai_signal(self.selected_ticker)
+        sig = get_ai_signal(self.selected_ticker, self.settings)
         self.ai_signal_label.setText(f"AI сигнал: {sig}")
 
     def start_trading(self):

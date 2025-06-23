@@ -1,5 +1,5 @@
 @echo off
-echo Installing dependencies...
-pip install pybit python-dotenv pandas numpy
-echo Installation complete.
+echo Обновление зависимостей...
+py -m pip install --upgrade pyinstaller PySide6 requests pybit numpy pandas
+echo Все зависимости обновлены!
 pause 
