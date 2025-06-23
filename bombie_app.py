@@ -3,6 +3,15 @@ import os
 import json
 import subprocess
 import importlib.util
+from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QTextEdit, QFileDialog, QMessageBox, QScrollArea, QGroupBox, QComboBox)
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon
+from pybit.unified_trading import HTTP
+import numpy as np
+import pandas as pd
+import threading
+import time
+import tempfile
 
 def ensure_package(pkg):
     if importlib.util.find_spec(pkg) is None:
@@ -328,10 +337,19 @@ def get_ai_signal(ticker, settings=None):
     except Exception as e:
         return f"err: {e}"
 
+def resource_path(rel_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, rel_path)
+    return os.path.join(os.path.abspath('.'), rel_path)
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Bombie Bybit Bot")
+        try:
+            self.setWindowIcon(QIcon(resource_path("bombie_icon.ico")))
+        except Exception:
+            pass
         self.env_vars = {}
         self.settings = self.load_settings()
         self.is_trading = False
